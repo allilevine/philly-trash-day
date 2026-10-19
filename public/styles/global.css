@@ -1,3 +1,342 @@
-/* Placeholder — full styles added in Task 11 */
-*, *::before, *::after { box-sizing: border-box; }
-body { font-family: system-ui, sans-serif; margin: 0; padding: 2rem 1rem; max-width: 640px; margin: 0 auto; }
+:root {
+  --bg: #fafaf9;
+  --text: #1a1a18;
+  --accent: #2d6a4f;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --max: 640px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+footer {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+footer a {
+  color: var(--muted);
+}
+
+/* ─── Header ───────────────────────────────────────────── */
+
+.site-header {
+  margin-bottom: 2rem;
+}
+
+.site-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 0.5rem;
+}
+
+.tagline {
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ─── Lookup widget ────────────────────────────────────── */
+
+.lookup {
+  margin-bottom: 3rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input-row input:focus {
+  border-color: var(--accent);
+}
+
+.input-row button {
+  padding: 0.75rem 1.25rem;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.input-row button:hover {
+  opacity: 0.85;
+}
+
+.geo-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.geo-btn:hover {
+  opacity: 0.8;
+}
+
+.status-text {
+  color: var(--muted);
+  margin: 1rem 0;
+}
+
+.result-answer {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.result-answer[data-answer="yes"] {
+  color: var(--accent);
+}
+
+.result-answer[data-answer="no"] {
+  color: var(--muted);
+}
+
+.result-detail {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  margin: 0.25rem 0;
+}
+
+.cal-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--accent);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.cal-link:hover {
+  opacity: 0.8;
+}
+
+.error-text {
+  color: #b91c1c;
+  margin: 0 0 0.75rem;
+}
+
+.try-again-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.try-again-btn:hover {
+  background: var(--border);
+}
+
+/* ─── How to subscribe ─────────────────────────────────── */
+
+.how-to-subscribe {
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.how-to-subscribe h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+.how-to-subscribe ul {
+  padding-left: 1.25rem;
+  color: var(--text);
+}
+
+.how-to-subscribe li {
+  margin-bottom: 0.25rem;
+}
+
+/* ─── Zone table ───────────────────────────────────────── */
+
+.zone-table {
+  margin-bottom: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+.zone-table h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.zone-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.zone-table th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--border);
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zone-table td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.zone-table tr:nth-child(even) td {
+  background: rgba(0,0,0,0.02);
+}
+
+.zone-table .neighborhoods {
+  color: var(--muted);
+}
+
+.zone-table a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.zone-table a:hover {
+  text-decoration: underline;
+}
+
+.zone-note {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* ─── FAQ ──────────────────────────────────────────────── */
+
+.faq {
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+.faq h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.faq details {
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+}
+
+.faq summary {
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  padding-right: 1.5rem;
+  position: relative;
+}
+
+.faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: var(--muted);
+}
+
+.faq details[open] summary::after {
+  content: '−';
+}
+
+.faq details p {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+}
+
+/* ─── Utilities ────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Mobile ───────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .site-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .result-answer {
+    font-size: 1.75rem;
+  }
+
+  .zone-table th:nth-child(2),
+  .zone-table td:nth-child(2) {
+    display: none;
+  }
+}
