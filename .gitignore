@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Generated data files (written by build script)
+src/data/zones.geojson
+src/data/zone-index.json
+public/feeds/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store

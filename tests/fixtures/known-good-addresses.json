@@ -1,0 +1,315 @@
+{
+  "_comment": "Source: Philadelphia AIS API (api.phila.gov/ais/v1/addresses). Verified 2026-10-18.",
+  "_coverage": "29 addresses across all 5 collection days, all 5 secondary-day patterns, 11 of 13 sandis districts. Missing 1A and 6L (small districts, no confirmed residential addresses found).",
+  "addresses": [
+  {
+    "address": "400 W Cheltenham Ave, Philadelphia, PA",
+    "neighborhood": "Oak Lane",
+    "expected": {
+      "trashDay": "MON",
+      "secondTrashDay": null,
+      "sandis": "5L",
+      "zoneId": "5lmon"
+    }
+  },
+  {
+    "address": "10000 Bustleton Ave, Philadelphia, PA",
+    "neighborhood": "Fox Chase",
+    "expected": {
+      "trashDay": "MON",
+      "secondTrashDay": null,
+      "sandis": "6A",
+      "zoneId": "6amon"
+    }
+  },
+  {
+    "address": "3601 Market St, Philadelphia, PA",
+    "neighborhood": "West Philadelphia",
+    "expected": {
+      "trashDay": "MON",
+      "secondTrashDay": null,
+      "sandis": "1B",
+      "zoneId": "1bmon"
+    }
+  },
+
+  {
+    "address": "1801 N Broad St, Philadelphia, PA",
+    "neighborhood": "Temple University area",
+    "expected": {
+      "trashDay": "MON",
+      "secondTrashDay": "THU",
+      "sandis": "3F",
+      "zoneId": "3fmon"
+    }
+  },
+  {
+    "address": "2100 South St, Philadelphia, PA",
+    "neighborhood": "Graduate Hospital",
+    "expected": {
+      "trashDay": "MON",
+      "secondTrashDay": "THU",
+      "sandis": "2B",
+      "zoneId": "2bmon"
+    }
+  },
+  {
+    "address": "1701 Fairmount Ave, Philadelphia, PA",
+    "neighborhood": "Fairmount",
+    "expected": {
+      "trashDay": "MON",
+      "secondTrashDay": "THU",
+      "sandis": "3C",
+      "zoneId": "3cmon"
+    }
+  },
+
+  {
+    "address": "5501 Germantown Ave, Philadelphia, PA",
+    "neighborhood": "Germantown",
+    "expected": {
+      "trashDay": "TUE",
+      "secondTrashDay": null,
+      "sandis": "4M",
+      "zoneId": "4mtue"
+    }
+  },
+  {
+    "address": "7200 Ogontz Ave, Philadelphia, PA",
+    "neighborhood": "Ogontz",
+    "expected": {
+      "trashDay": "TUE",
+      "secondTrashDay": null,
+      "sandis": "4G",
+      "zoneId": "4gtue"
+    }
+  },
+  {
+    "address": "5100 Haverford Ave, Philadelphia, PA",
+    "neighborhood": "Cobbs Creek",
+    "expected": {
+      "trashDay": "TUE",
+      "secondTrashDay": null,
+      "sandis": "1B",
+      "zoneId": "1btue"
+    }
+  },
+  {
+    "address": "9700 Academy Rd, Philadelphia, PA",
+    "neighborhood": "Northeast Philadelphia",
+    "expected": {
+      "trashDay": "TUE",
+      "secondTrashDay": null,
+      "sandis": "6B",
+      "zoneId": "6btue"
+    }
+  },
+
+  {
+    "address": "1001 S 21st St, Philadelphia, PA",
+    "neighborhood": "Point Breeze",
+    "expected": {
+      "trashDay": "TUE",
+      "secondTrashDay": "FRI",
+      "sandis": "2B",
+      "zoneId": "2btue"
+    }
+  },
+  {
+    "address": "1800 Catharine St, Philadelphia, PA",
+    "neighborhood": "Graduate Hospital",
+    "expected": {
+      "trashDay": "TUE",
+      "secondTrashDay": "FRI",
+      "sandis": "2B",
+      "zoneId": "2btue"
+    }
+  },
+
+  {
+    "address": "4201 Baltimore Ave, Philadelphia, PA",
+    "neighborhood": "Baltimore Avenue / West Philadelphia",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": null,
+      "sandis": "1B",
+      "zoneId": "1bwed"
+    }
+  },
+  {
+    "address": "6200 Greene St, Philadelphia, PA",
+    "neighborhood": "Mt. Airy",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": null,
+      "sandis": "4M",
+      "zoneId": "4mwed"
+    }
+  },
+  {
+    "address": "4400 Torresdale Ave, Philadelphia, PA",
+    "neighborhood": "Wissinoming",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": null,
+      "sandis": "5F",
+      "zoneId": "5fwed"
+    }
+  },
+  {
+    "address": "9400 Krewstown Rd, Philadelphia, PA",
+    "neighborhood": "Northeast Philadelphia",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": null,
+      "sandis": "6A",
+      "zoneId": "6awed"
+    }
+  },
+
+  {
+    "address": "1234 S 13th St, Philadelphia, PA",
+    "neighborhood": "South Philadelphia",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": "SAT",
+      "sandis": "2B",
+      "zoneId": "2bwed"
+    }
+  },
+  {
+    "address": "1500 S Broad St, Philadelphia, PA",
+    "neighborhood": "South Philadelphia",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": "SAT",
+      "sandis": "2B",
+      "zoneId": "2bwed"
+    }
+  },
+  {
+    "address": "1500 Market St, Philadelphia, PA",
+    "neighborhood": "Center City",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": "SAT",
+      "sandis": "2B",
+      "zoneId": "2bwed"
+    }
+  },
+  {
+    "address": "2401 Pennsylvania Ave, Philadelphia, PA",
+    "neighborhood": "Art Museum area",
+    "expected": {
+      "trashDay": "WED",
+      "secondTrashDay": "SAT",
+      "sandis": "3C",
+      "zoneId": "3cwed"
+    }
+  },
+
+  {
+    "address": "8000 E Roosevelt Blvd, Philadelphia, PA",
+    "neighborhood": "Mayfair / Northeast Philadelphia",
+    "expected": {
+      "trashDay": "THU",
+      "secondTrashDay": null,
+      "sandis": "6A",
+      "zoneId": "6athu"
+    }
+  },
+
+  {
+    "address": "2600 E Lehigh Ave, Philadelphia, PA",
+    "neighborhood": "Port Richmond",
+    "expected": {
+      "trashDay": "THU",
+      "secondTrashDay": "MON",
+      "sandis": "3F",
+      "zoneId": "3fthu"
+    }
+  },
+
+  {
+    "address": "3500 Aramingo Ave, Philadelphia, PA",
+    "neighborhood": "Port Richmond",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": null,
+      "sandis": "5F",
+      "zoneId": "5ffri"
+    }
+  },
+  {
+    "address": "2600 Castor Ave, Philadelphia, PA",
+    "neighborhood": "Mayfair",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": null,
+      "sandis": "5F",
+      "zoneId": "5ffri"
+    }
+  },
+  {
+    "address": "2400 Orthodox St, Philadelphia, PA",
+    "neighborhood": "Port Richmond",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": null,
+      "sandis": "5F",
+      "zoneId": "5ffri"
+    }
+  },
+  {
+    "address": "7100 Elmwood Ave, Philadelphia, PA",
+    "neighborhood": "Elmwood",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": null,
+      "sandis": "1B",
+      "zoneId": "1bfri"
+    }
+  },
+  {
+    "address": "7600 Frankford Ave, Philadelphia, PA",
+    "neighborhood": "Mayfair / Northeast Philadelphia",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": null,
+      "sandis": "6B",
+      "zoneId": "6bfri"
+    }
+  },
+
+  {
+    "address": "1000 Frankford Ave, Philadelphia, PA",
+    "neighborhood": "Kensington",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": "TUE",
+      "sandis": "3F",
+      "zoneId": "3ffri"
+    }
+  },
+  {
+    "address": "1800 S Christopher Columbus Blvd, Philadelphia, PA",
+    "neighborhood": "South Philadelphia waterfront",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": "TUE",
+      "sandis": "2D",
+      "zoneId": "2dfri"
+    }
+  },
+  {
+    "address": "1300 N Delaware Ave, Philadelphia, PA",
+    "neighborhood": "Fishtown",
+    "expected": {
+      "trashDay": "FRI",
+      "secondTrashDay": "TUE",
+      "sandis": "3F",
+      "zoneId": "3ffri"
+    }
+  }
+  ]
+}
