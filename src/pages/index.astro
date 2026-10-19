@@ -1,13 +1,105 @@
 ---
-// Placeholder — full implementation in Task 10
+import LookupWidget from '../components/LookupWidget.astro';
+import ZoneTable from '../components/ZoneTable.astro';
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When is garbage day in Philadelphia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Philadelphia collects trash and recycling once a week. Your specific day depends on your address. Enter your address above to find your collection day instantly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Philadelphia delay trash pickup on holidays?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. When a city-observed holiday falls Monday through Friday, collection shifts by one day for the rest of that week. For example, if Monday is a holiday, Tuesday routes move to Wednesday, Wednesday routes move to Thursday, and so on. Holidays observed include New Year's Day, MLK Day, Memorial Day, Juneteenth, Independence Day, Labor Day, Veterans Day, Thanksgiving, the day after Thanksgiving, Christmas Eve, and Christmas Day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find my Philadelphia recycling schedule?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Philadelphia collects recycling every week on the same day as your regular trash — there is no alternating A/B week system. Enter your address above to see your collection day. Some neighborhoods in South Philadelphia and Center City have a second trash-only pickup day, but recycling only happens on the primary day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I add Philadelphia trash day to my calendar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Look up your address above, then click 'Add to calendar'. This opens a webcal:// subscription link that works with Google Calendar, Apple Calendar, and Outlook. Your calendar will update automatically whenever the city announces holiday delays. You can also find the subscribe link for your zone in the schedule table below."
+      }
+    }
+  ]
+};
 ---
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Philadelphia Trash &amp; Recycling Day — Is Today Your Pickup Day?</title>
+    <meta
+      name="description"
+      content="Find out if today is garbage day at your Philadelphia address. Get your trash and recycling collection day instantly, plus a calendar feed that handles holiday delays automatically."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <link rel="stylesheet" href="/styles/global.css" />
   </head>
   <body>
-    <p>Coming soon.</p>
+    <main>
+      <header class="site-header">
+        <h1>Is today trash day in Philadelphia?</h1>
+        <p class="tagline">Enter your address for an instant yes or no.</p>
+      </header>
+
+      <LookupWidget />
+
+      <section class="how-to-subscribe">
+        <h2>Add your trash day to your calendar</h2>
+        <p>
+          After looking up your address, click <strong>Add to calendar</strong>. This creates a
+          recurring calendar subscription — the feed updates automatically when the city announces
+          holiday delays, so you never have to check back.
+        </p>
+        <ul>
+          <li><strong>Google Calendar:</strong> Click the link → "Open Google Calendar" → Save.</li>
+          <li><strong>Apple Calendar:</strong> Click the link → it opens directly in Calendar.</li>
+          <li>
+            <strong>Outlook:</strong> Copy the <code>webcal://</code> link, go to Calendar →
+            Add Calendar → Subscribe from web → paste the link.
+          </li>
+        </ul>
+      </section>
+
+      <ZoneTable />
+
+      <section class="faq">
+        <h2>Frequently asked questions</h2>
+        {faqSchema.mainEntity.map(qa => (
+          <details>
+            <summary>{qa.name}</summary>
+            <p>{qa.acceptedAnswer.text}</p>
+          </details>
+        ))}
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Data from <a href="https://opendataphilly.org/datasets/sanitation-collection-day-boundary/" rel="noopener">OpenDataPhilly</a>.
+        Not affiliated with the City of Philadelphia.
+      </p>
+    </footer>
   </body>
 </html>

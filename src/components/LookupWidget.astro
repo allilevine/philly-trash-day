@@ -1,0 +1,42 @@
+---
+---
+<section class="lookup">
+  <div data-state="initial">
+    <form id="address-form">
+      <label for="address-input" class="sr-only">Your Philadelphia address</label>
+      <div class="input-row">
+        <input
+          id="address-input"
+          name="address"
+          type="text"
+          placeholder="Enter your Philadelphia address"
+          autocomplete="street-address"
+          required
+        />
+        <button type="submit">Check</button>
+      </div>
+    </form>
+    <button id="geolocate-btn" class="geo-btn">Use my location</button>
+  </div>
+
+  <div data-state="loading" style="display:none">
+    <p class="status-text">Checking your address…</p>
+  </div>
+
+  <div data-state="result" style="display:none">
+    <p id="result-today" class="result-answer" data-answer="no"></p>
+    <p id="result-recycling" class="result-detail"></p>
+    <p id="result-next" class="result-detail"></p>
+    <a id="result-cal-link" href="#" class="cal-link">Add to calendar</a>
+  </div>
+
+  <div data-state="error" style="display:none">
+    <p id="error-message" class="error-text"></p>
+    <button
+      class="try-again-btn"
+      onclick="document.querySelector('[data-state=initial]').style.display=''; this.closest('[data-state=error]').style.display='none';"
+    >Try again</button>
+  </div>
+</section>
+
+<script type="module" src="/src/scripts/app.js"></script>

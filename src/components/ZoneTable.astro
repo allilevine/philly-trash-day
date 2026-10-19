@@ -1,0 +1,144 @@
+---
+import zoneIndex from '../data/zone-index.json';
+
+// Neighborhood labels per zoneId (derived from known fixture addresses and local knowledge)
+const NEIGHBORHOODS: Record<string, string> = {
+  // sandis 1A — Southwest Philadelphia
+  '1afri': 'Southwest Philadelphia',
+  '1amon': 'Southwest Philadelphia',
+  '1athu': 'Southwest Philadelphia',
+  '1atue': 'Southwest Philadelphia',
+  '1awed': 'Southwest Philadelphia',
+  // sandis 1B — West Philadelphia, Cobbs Creek, Elmwood
+  '1bfri': 'Elmwood, Kingsessing',
+  '1bmon': 'West Philadelphia, Overbrook',
+  '1bthu': 'West Philadelphia',
+  '1btue': 'Cobbs Creek, Cedar Park',
+  '1bwed': 'Baltimore Ave corridor, University City',
+  // sandis 2B — Center City, South Philadelphia, Graduate Hospital
+  '2bfri': 'South Philadelphia waterfront',
+  '2bmon': 'Graduate Hospital, Queen Village',
+  '2bthu': 'Center City, Old City',
+  '2btue': 'Point Breeze, Newbold',
+  '2bwed': 'South Philadelphia, Passyunk Square',
+  // sandis 2D — South Philadelphia waterfront
+  '2dfri': 'South Philadelphia waterfront, Stadium District',
+  // sandis 3C — Fairmount, Art Museum, North Philadelphia
+  '3cmon': 'Fairmount, Spring Garden',
+  '3cthu': 'North Philadelphia, Strawberry Mansion',
+  '3ctue': 'Francisville, Brewerytown',
+  '3cwed': 'Art Museum area, Lemon Hill',
+  '3cfri': 'Fishtown, Richmond (north)',
+  // sandis 3F — Kensington, Port Richmond, Temple area
+  '3ffri': 'Kensington, Fishtown (north)',
+  '3fmon': 'Temple University area, North Philadelphia',
+  '3fthu': 'Port Richmond, Bridesburg',
+  '3ftue': 'Kensington, Harrowgate',
+  '3fwed': 'Olney, Logan',
+  // sandis 4G — Ogontz, Fern Rock
+  '4gfri': 'Fern Rock, Lawncrest',
+  '4gmon': 'Ogontz, Crescentville',
+  '4gthu': 'Germantown (east), Chelten Hills',
+  '4gtue': 'Ogontz, Fern Rock',
+  '4gwed': 'East Oak Lane, Burholme',
+  // sandis 4M — Germantown, Mt. Airy
+  '4mfri': 'Mt. Airy (east)',
+  '4mmon': 'Germantown (northwest)',
+  '4mthu': 'Mt. Airy (west), Chestnut Hill',
+  '4mtue': 'Germantown, Wayne Junction',
+  '4mwed': 'Mt. Airy, Wyndmoor border',
+  // sandis 5F — Port Richmond, Wissinoming, Mayfair
+  '5ffri': 'Port Richmond, Mayfair (south)',
+  '5fmon': 'Tacony, Wissinoming',
+  '5fthu': 'Torresdale, Holmesburg',
+  '5ftue': 'Mayfair, Castor Gardens',
+  '5fwed': 'Wissinoming, Bridesburg (north)',
+  // sandis 5L — Oak Lane, Cheltenham border
+  '5lfri': 'Oak Lane (east)',
+  '5lmon': 'Oak Lane, Cheltenham Ave',
+  '5lthu': 'Melrose Park Gardens',
+  '5ltue': 'Oak Lane, Lawndale',
+  '5lwed': 'Oak Lane (west)',
+  // sandis 6A — Northeast Philadelphia (Fox Chase, Somerton)
+  '6afri': 'Fox Chase (east)',
+  '6amon': 'Fox Chase, Bustleton',
+  '6athu': 'Mayfair, Rhawnhurst',
+  '6atue': 'Bustleton (north)',
+  '6awed': 'Somerton, Krewstown',
+  // sandis 6B — Northeast Philadelphia (Mayfair, Academy)
+  '6bfri': 'Mayfair (northeast), Holmesburg',
+  '6bmon': 'Academy Gardens, Pennypack',
+  '6bthu': 'Torresdale (northeast)',
+  '6btue': 'Academy Rd corridor',
+  '6bwed': 'Pennypack Park border',
+  // sandis 6L — Far Northeast Philadelphia
+  '6lfri': 'Far Northeast Philadelphia',
+  '6lmon': 'Somerton (east), Parkwood Manor',
+  '6lthu': 'Byberry, Morrell Park',
+  '6ltue': 'Far Northeast, Mechanicsville',
+  '6lwed': 'Far Northeast Philadelphia',
+};
+
+const DAY_LABELS: Record<string, string> = {
+  MON: 'Monday',
+  TUE: 'Tuesday',
+  WED: 'Wednesday',
+  THU: 'Thursday',
+  FRI: 'Friday',
+  SAT: 'Saturday',
+};
+
+// Build display rows: one per unique (trashDay, secondTrashDay) combo
+const seen = new Set<string>();
+const rows: Array<{ trashDay: string; secondTrashDay: string | null; neighborhoods: string[]; feedId: string }> = [];
+
+for (const zone of Object.values(zoneIndex as Record<string, { zoneId: string; trashDay: string; secondTrashDay: string | null; sandis: string }>)) {
+  if (!zone.trashDay?.trim()) continue;
+  const key = `${zone.trashDay}|${zone.secondTrashDay ?? ''}`;
+  if (seen.has(key)) continue;
+  seen.add(key);
+
+  const feedId = zone.secondTrashDay
+    ? `${zone.trashDay.toLowerCase()}-${zone.secondTrashDay.toLowerCase()}`
+    : zone.trashDay.toLowerCase();
+
+  // Gather neighborhoods for all zones with this schedule
+  const nhoods = Object.values(zoneIndex as Record<string, { trashDay: string; secondTrashDay: string | null; zoneId: string }>)
+    .filter(z => z.trashDay === zone.trashDay && z.secondTrashDay === zone.secondTrashDay)
+    .map(z => NEIGHBORHOODS[z.zoneId])
+    .filter(Boolean)
+    .sort();
+
+  rows.push({ trashDay: zone.trashDay, secondTrashDay: zone.secondTrashDay ?? null, neighborhoods: [...new Set(nhoods)], feedId });
+}
+
+rows.sort((a, b) => {
+  const order = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+  return order.indexOf(a.trashDay) - order.indexOf(b.trashDay);
+});
+---
+
+<section class="zone-table">
+  <h2>Philadelphia Collection Schedule by Zone</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Trash &amp; Recycling Day</th>
+        <th>Second Pickup Day</th>
+        <th>Neighborhoods</th>
+        <th>Subscribe</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map(row => (
+        <tr>
+          <td>{DAY_LABELS[row.trashDay] ?? row.trashDay}</td>
+          <td>{row.secondTrashDay ? `${DAY_LABELS[row.secondTrashDay] ?? row.secondTrashDay} (trash only)` : '—'}</td>
+          <td class="neighborhoods">{row.neighborhoods.join(', ') || '—'}</td>
+          <td><a href={`webcal://${Astro.url.host}/feeds/${row.feedId}.ics`}>Add to calendar</a></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <p class="zone-note">Not sure which zone you're in? Enter your address above.</p>
+</section>

@@ -18,23 +18,29 @@ export async function fetchAndNormalizeZones() {
 
   const index = {};
 
-  const features = raw.features.map((feature) => {
-    const p = feature.properties;
-    const zoneId = (p.disday || '').toLowerCase();
-    const trashDay = (p.collday || '').toUpperCase();
-    const rawSecondary = p.secondary_rubbish_day;
-    const secondTrashDay =
-      rawSecondary && rawSecondary.trim() !== '' ? rawSecondary.toUpperCase() : null;
-    const sandis = (p.sandis || '').toUpperCase();
+  const features = raw.features
+    .filter((feature) => {
+      // Skip features with no valid collection day (malformed source data)
+      const collday = (feature.properties?.collday || '').trim();
+      return collday.length > 0;
+    })
+    .map((feature) => {
+      const p = feature.properties;
+      const trashDay = p.collday.trim().toUpperCase();
+      const sandis = (p.sandis || '').trim().toUpperCase();
+      const zoneId = `${sandis.toLowerCase()}${trashDay.toLowerCase()}`;
+      const rawSecondary = p.secondary_rubbish_day;
+      const secondTrashDay =
+        rawSecondary && rawSecondary.trim() !== '' ? rawSecondary.trim().toUpperCase() : null;
 
-    const zone = { zoneId, trashDay, secondTrashDay, sandis };
-    index[zoneId] = zone;
+      const zone = { zoneId, trashDay, secondTrashDay, sandis };
+      index[zoneId] = zone;
 
-    return {
-      ...feature,
-      properties: zone,
-    };
-  });
+      return {
+        ...feature,
+        properties: zone,
+      };
+    });
 
   const geojson = simplify(
     { ...raw, features },
