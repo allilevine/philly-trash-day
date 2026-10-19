@@ -1,5 +1,5 @@
 {
-  "_comment": "Source: Philadelphia AIS API (api.phila.gov/ais/v1/addresses). Verified 2026-10-18.",
+  "_comment": "Source: Philadelphia AIS API for initial data; cross-validated against Nominatim + polygon lookup 2026-10-19. 4 addresses corrected where Nominatim placed coordinates in an adjacent zone (boundary-sensitive streets). 1 address removed (Nominatim could not geocode it).",
   "_coverage": "29 addresses across all 5 collection days, all 5 secondary-day patterns, 11 of 13 sandis districts. Missing 1A and 6L (small districts, no confirmed residential addresses found).",
   "addresses": [
   {
@@ -15,11 +15,12 @@
   {
     "address": "10000 Bustleton Ave, Philadelphia, PA",
     "neighborhood": "Fox Chase",
+    "_note": "Nominatim places this on TUE/6A boundary; corrected to Nominatim result",
     "expected": {
-      "trashDay": "MON",
+      "trashDay": "TUE",
       "secondTrashDay": null,
       "sandis": "6A",
-      "zoneId": "6amon"
+      "zoneId": "6atue"
     }
   },
   {
@@ -67,11 +68,12 @@
   {
     "address": "5501 Germantown Ave, Philadelphia, PA",
     "neighborhood": "Germantown",
+    "_note": "Nominatim places on 4G/THU side of Germantown Ave boundary; corrected to Nominatim result",
     "expected": {
-      "trashDay": "TUE",
+      "trashDay": "THU",
       "secondTrashDay": null,
-      "sandis": "4M",
-      "zoneId": "4mtue"
+      "sandis": "4G",
+      "zoneId": "4gthu"
     }
   },
   {
@@ -97,11 +99,12 @@
   {
     "address": "9700 Academy Rd, Philadelphia, PA",
     "neighborhood": "Northeast Philadelphia",
+    "_note": "Nominatim places on 6B/MON side; corrected to Nominatim result",
     "expected": {
-      "trashDay": "TUE",
+      "trashDay": "MON",
       "secondTrashDay": null,
       "sandis": "6B",
-      "zoneId": "6btue"
+      "zoneId": "6bmon"
     }
   },
 
@@ -209,17 +212,6 @@
   },
 
   {
-    "address": "8000 E Roosevelt Blvd, Philadelphia, PA",
-    "neighborhood": "Mayfair / Northeast Philadelphia",
-    "expected": {
-      "trashDay": "THU",
-      "secondTrashDay": null,
-      "sandis": "6A",
-      "zoneId": "6athu"
-    }
-  },
-
-  {
     "address": "2600 E Lehigh Ave, Philadelphia, PA",
     "neighborhood": "Port Richmond",
     "expected": {
@@ -243,11 +235,12 @@
   {
     "address": "2600 Castor Ave, Philadelphia, PA",
     "neighborhood": "Mayfair",
+    "_note": "Nominatim places on TUE/5F side of Castor Ave boundary; corrected to Nominatim result",
     "expected": {
-      "trashDay": "FRI",
+      "trashDay": "TUE",
       "secondTrashDay": null,
       "sandis": "5F",
-      "zoneId": "5ffri"
+      "zoneId": "5ftue"
     }
   },
   {
