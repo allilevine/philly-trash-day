@@ -21,11 +21,17 @@ console.log(`[build-data] Fetching zone data…`);
 const { geojson, index } = await fetchAndNormalizeZones();
 console.log(`[build-data] ${geojson.features.length} features, ${Object.keys(index).length} zones`);
 
-// Write GeoJSON
+// Write zone-index.json to src/data (imported at build time by ZoneTable.astro)
 mkdirSync(join(root, 'src/data'), { recursive: true });
-writeFileSync(join(root, 'src/data/zones.geojson'), JSON.stringify(geojson));
 writeFileSync(join(root, 'src/data/zone-index.json'), JSON.stringify(index, null, 2));
-console.log(`[build-data] Wrote zones.geojson and zone-index.json`);
+
+// Write runtime-fetched files to public/data (served as static assets by Astro)
+const publicDataDir = join(root, 'public/data');
+mkdirSync(publicDataDir, { recursive: true });
+writeFileSync(join(publicDataDir, 'zones.geojson'), JSON.stringify(geojson));
+writeFileSync(join(publicDataDir, 'holidays.json'), readFileSync(join(root, 'src/data/holidays.json')));
+writeFileSync(join(publicDataDir, 'holiday-overrides.json'), readFileSync(join(root, 'src/data/holiday-overrides.json')));
+console.log(`[build-data] Wrote zone-index.json, public/data/zones.geojson, holidays.json, holiday-overrides.json`);
 
 // Deduplicate by unique (trashDay, secondTrashDay) schedule — one iCal feed per schedule type
 const seen = new Set();

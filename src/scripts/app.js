@@ -19,7 +19,28 @@ async function loadData() {
 }
 
 function todayISO() {
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function shiftISO(dateStr, days) {
+  const [y, m, day] = dateStr.split('-').map(Number);
+  const d = new Date(y, m - 1, day);
+  d.setDate(d.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function formatRelativeDate(isoDate) {
+  const today = todayISO();
+  if (isoDate === today) return 'today';
+  if (isoDate === shiftISO(today, 1)) return 'tomorrow';
+  const [y, m, day] = isoDate.split('-').map(Number);
+  const date = new Date(y, m - 1, day);
+  const [ty, tm, td] = today.split('-').map(Number);
+  const daysAway = Math.round((date - new Date(ty, tm - 1, td)) / 86400000);
+  const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+  if (daysAway <= 7) return `this ${dayName}`;
+  return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
 
 function render(state, data = {}) {
@@ -31,36 +52,57 @@ function render(state, data = {}) {
 
   if (state === 'result' && data.status && data.zone) {
     const { status, zone } = data;
-    const today = document.getElementById('result-today');
-    const recycling = document.getElementById('result-recycling');
-    const next = document.getElementById('result-next');
+    const todayEl = document.getElementById('result-today');
+    const upcomingEl = document.getElementById('result-upcoming');
     const calLink = document.getElementById('result-cal-link');
 
-    if (today) {
+    if (todayEl) {
       if (status.isTrashDay) {
-        today.textContent = 'Yes — put your bins out today.';
-        today.dataset.answer = 'yes';
+        todayEl.textContent = 'Yes — put your bins out today.';
+        todayEl.dataset.answer = 'yes';
       } else if (status.isSecondTrashDay) {
-        today.textContent = 'Yes — trash only today (no recycling).';
-        today.dataset.answer = 'yes';
+        todayEl.textContent = 'Yes — trash only today (no recycling).';
+        todayEl.dataset.answer = 'yes';
       } else {
-        today.textContent = 'No — not your pickup day.';
-        today.dataset.answer = 'no';
+        todayEl.textContent = 'No — not your pickup day.';
+        todayEl.dataset.answer = 'no';
       }
     }
 
-    if (recycling) {
-      recycling.textContent = status.isRecyclingDay
-        ? 'Recycling is collected today.'
-        : `Next recycling pickup: ${status.nextTrashDate ?? '—'}`;
-    }
+    if (upcomingEl) {
+      upcomingEl.innerHTML = '';
 
-    if (next) {
-      const lines = [`Next trash pickup: ${status.nextTrashDate ?? '—'}`];
-      if (zone.secondTrashDay && status.nextSecondTrashDate) {
-        lines.push(`Next second pickup (trash only): ${status.nextSecondTrashDate}`);
+      if (status.isTrashDay || status.isSecondTrashDay) {
+        // On a pickup day — show what's next
+        if (status.nextTrashDate) {
+          const p = document.createElement('p');
+          p.className = 'result-detail';
+          p.textContent = `Next trash & recycling pickup: ${formatRelativeDate(status.nextTrashDate)}`;
+          upcomingEl.appendChild(p);
+        }
+      } else {
+        // Not a pickup day — show the soonest upcoming pickup(s)
+        const primary = status.nextTrashDate
+          ? { date: status.nextTrashDate, label: 'trash & recycling' }
+          : null;
+        const secondary = status.nextSecondTrashDate
+          ? { date: status.nextSecondTrashDate, label: 'trash only (no recycling)' }
+          : null;
+
+        // Sort by date, soonest first
+        const pickups = [primary, secondary]
+          .filter(Boolean)
+          .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+
+        pickups.forEach((pickup, i) => {
+          const p = document.createElement('p');
+          p.className = i === 0 ? 'result-upcoming-primary' : 'result-detail';
+          p.textContent = i === 0
+            ? `Next pickup: ${formatRelativeDate(pickup.date)} — ${pickup.label}`
+            : `Then: ${formatRelativeDate(pickup.date)} — ${pickup.label}`;
+          upcomingEl.appendChild(p);
+        });
       }
-      next.textContent = lines.join(' · ');
     }
 
     if (calLink) {

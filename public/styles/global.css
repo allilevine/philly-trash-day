@@ -124,6 +124,12 @@ footer a {
   opacity: 0.8;
 }
 
+.lookup-hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
 .status-text {
   color: var(--muted);
   margin: 1rem 0;
@@ -142,6 +148,12 @@ footer a {
 
 .result-answer[data-answer="no"] {
   color: var(--muted);
+}
+
+.result-upcoming-primary {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0.5rem 0 0.25rem;
 }
 
 .result-detail {

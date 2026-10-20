@@ -17,6 +17,7 @@
       </div>
     </form>
     <button id="geolocate-btn" class="geo-btn">Use my location</button>
+    <p class="lookup-hint">Not sure which zone you're in? Enter your address to find out.</p>
   </div>
 
   <div data-state="loading" style="display:none">
@@ -25,8 +26,7 @@
 
   <div data-state="result" style="display:none">
     <p id="result-today" class="result-answer" data-answer="no"></p>
-    <p id="result-recycling" class="result-detail"></p>
-    <p id="result-next" class="result-detail"></p>
+    <div id="result-upcoming"></div>
     <a id="result-cal-link" href="#" class="cal-link">Add to calendar</a>
   </div>
 

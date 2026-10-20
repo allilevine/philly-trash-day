@@ -8,6 +8,7 @@ dist/
 # Generated data files (written by build script)
 src/data/zones.geojson
 src/data/zone-index.json
+public/data/
 public/feeds/
 
 # Environment
