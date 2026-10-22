@@ -37,6 +37,14 @@ const faqSchema = {
         "@type": "Answer",
         "text": "Look up your address above, then click 'Add to calendar'. This opens a webcal:// subscription link that works with Google Calendar, Apple Calendar, and Outlook. Your calendar will update automatically whenever the city announces holiday delays. You can also find the subscribe link for your zone in the schedule table below."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this site store or share my address?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Your address is sent directly from your browser to OpenStreetMap's Nominatim geocoding service to find its coordinates, and is not stored by this site. If you use the 'Use my location' button, your coordinates are used only to identify your collection zone and are never transmitted anywhere."
+      }
     }
   ]
 };
