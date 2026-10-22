@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 
 const fixture = JSON.parse(readFileSync(join(root, 'tests/fixtures/known-good-addresses.json'), 'utf8'));
-const geojson = JSON.parse(readFileSync(join(root, 'src/data/zones.geojson'), 'utf8'));
+const geojson = JSON.parse(readFileSync(join(root, 'public/data/zones.geojson'), 'utf8'));
 
 async function geocode(address) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=us`;

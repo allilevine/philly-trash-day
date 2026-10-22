@@ -13,6 +13,7 @@ export async function geocodeAddress(address) {
   const res = await fetch(url, {
     headers: { 'User-Agent': 'phillytrashday.com/1.0' },
   });
+  if (!res.ok) return null;
   const results = await res.json();
   if (!results.length) return null;
   return { lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon) };

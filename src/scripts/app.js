@@ -12,10 +12,14 @@ async function loadData() {
     fetch('/data/holidays.json'),
     fetch('/data/holiday-overrides.json'),
   ]);
-  zonesGeojson = await geojsonRes.json();
-  const holidaysRaw = await holidaysRes.json();
-  overrides = await overridesRes.json();
+  const [zonesData, holidaysRaw, overridesData] = await Promise.all([
+    geojsonRes.json(),
+    holidaysRes.json(),
+    overridesRes.json(),
+  ]);
+  zonesGeojson = zonesData;
   holidays = Object.values(holidaysRaw).flat();
+  overrides = overridesData;
 }
 
 function todayISO() {
@@ -39,7 +43,7 @@ function formatRelativeDate(isoDate) {
   const [ty, tm, td] = today.split('-').map(Number);
   const daysAway = Math.round((date - new Date(ty, tm - 1, td)) / 86400000);
   const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-  if (daysAway <= 7) return `this ${dayName}`;
+  if (daysAway < 7) return `this ${dayName}`;
   return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
 
@@ -132,12 +136,16 @@ async function handleLookup(lat, lon) {
 
 async function handleAddressSubmit(address) {
   render('loading');
-  const coords = await geocodeAddress(address);
-  if (!coords) {
-    render('error', { message: 'Address not found. Try including the street number and city.' });
-    return;
+  try {
+    const coords = await geocodeAddress(address);
+    if (!coords) {
+      render('error', { message: 'Address not found. Try including the street number and city.' });
+      return;
+    }
+    await handleLookup(coords.lat, coords.lon);
+  } catch {
+    render('error', { message: 'Something went wrong. Check your connection and try again.' });
   }
-  await handleLookup(coords.lat, coords.lon);
 }
 
 async function handleGeolocate() {
@@ -152,7 +160,12 @@ async function handleGeolocate() {
 
 // Boot
 (async () => {
-  await loadData();
+  try {
+    await loadData();
+  } catch {
+    render('error', { message: 'Failed to load schedule data. Please refresh the page.' });
+    return;
+  }
 
   const form = document.getElementById('address-form');
   if (form) {

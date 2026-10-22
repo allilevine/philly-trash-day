@@ -1,5 +1,5 @@
 import ical from 'ical-generator';
-import { getActualPickupDate } from '../../src/scripts/lib/holiday-logic.js';
+import { getActualPickupDate, hasHolidayInWeek } from '../../src/scripts/lib/holiday-logic.js';
 
 const DAY_ABBR_TO_DOW = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 0 };
 
@@ -51,6 +51,7 @@ export function generateZoneIcal(zone, holidays, overrides, windowStart, windowE
 
   if (zone.secondTrashDay) {
     for (const scheduledDate of enumerateDays(zone.secondTrashDay, windowStart, windowEnd)) {
+      if (hasHolidayInWeek(scheduledDate, holidays)) continue; // cancelled in holiday weeks
       const actual = getActualPickupDate(scheduledDate, holidays, overrides);
       if (actual === 'skip') continue;
       cal.createEvent({

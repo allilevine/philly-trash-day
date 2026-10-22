@@ -1,4 +1,4 @@
-import { getActualPickupDate } from './lib/holiday-logic.js';
+import { getActualPickupDate, hasHolidayInWeek } from './lib/holiday-logic.js';
 
 const DAY_ABBR_TO_DOW = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 0 };
 
@@ -24,7 +24,7 @@ function scheduledDayInWeek(date, dayAbbr) {
  * Returns the next actual pickup date strictly after `fromDate`.
  * Steps forward one canonical week at a time until a non-"skip" result.
  */
-function nextPickupAfter(fromDate, dayAbbr, holidays, overrides) {
+function nextPickupAfter(fromDate, dayAbbr, holidays, overrides, cancelInHolidayWeek = false) {
   // Start from the canonical scheduled day in the current week
   let scheduled = scheduledDayInWeek(fromDate, dayAbbr);
   // Must be strictly after fromDate
@@ -34,8 +34,10 @@ function nextPickupAfter(fromDate, dayAbbr, holidays, overrides) {
     scheduled = d.toISOString().slice(0, 10);
   }
   for (let i = 0; i < 52; i++) {
-    const actual = getActualPickupDate(scheduled, holidays, overrides);
-    if (actual !== 'skip') return actual;
+    if (!(cancelInHolidayWeek && hasHolidayInWeek(scheduled, holidays))) {
+      const actual = getActualPickupDate(scheduled, holidays, overrides);
+      if (actual !== 'skip') return actual;
+    }
     const d = new Date(scheduled + 'T00:00:00Z');
     d.setUTCDate(d.getUTCDate() + 7);
     scheduled = d.toISOString().slice(0, 10);
@@ -59,17 +61,19 @@ export function getPickupStatus(zone, date, holidays, overrides) {
   const isTrashDay = primaryActual === date;
   const isRecyclingDay = isTrashDay;
 
-  // Secondary day (pilot zones only)
+  // Secondary day (pilot zones only) — cancelled (not shifted) in holiday weeks
   let isSecondTrashDay = false;
   if (zone.secondTrashDay) {
     const secondScheduled = scheduledDayInWeek(date, zone.secondTrashDay);
-    const secondActual = getActualPickupDate(secondScheduled, holidays, overrides);
-    isSecondTrashDay = secondActual === date && !isTrashDay;
+    if (!hasHolidayInWeek(secondScheduled, holidays)) {
+      const secondActual = getActualPickupDate(secondScheduled, holidays, overrides);
+      isSecondTrashDay = secondActual === date && !isTrashDay;
+    }
   }
 
-  const nextTrashDate = nextPickupAfter(date, zone.trashDay, holidays, overrides);
+  const nextTrashDate = nextPickupAfter(date, zone.trashDay, holidays, overrides, false);
   const nextSecondTrashDate = zone.secondTrashDay
-    ? nextPickupAfter(date, zone.secondTrashDay, holidays, overrides)
+    ? nextPickupAfter(date, zone.secondTrashDay, holidays, overrides, true)
     : null;
 
   return { isTrashDay, isRecyclingDay, isSecondTrashDay, nextTrashDate, nextSecondTrashDate };

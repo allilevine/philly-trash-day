@@ -45,6 +45,15 @@ function shiftDate(dateStr, days) {
  * @param {Record<string, string|"skip">} overrides - manual date overrides
  * @returns {string} actual pickup date, or "skip" if cancelled
  */
+/**
+ * Returns true if any Mon–Fri city holiday falls in the same ISO week as dateStr.
+ * Used to cancel (not shift) secondary pilot pickups in holiday weeks.
+ */
+export function hasHolidayInWeek(dateStr, holidays) {
+  const week = isoWeekKey(dateStr);
+  return holidays.some(h => isoWeekKey(h) === week && isoDow(h) <= 4);
+}
+
 export function getActualPickupDate(scheduledDate, holidays, overrides) {
   if (overrides[scheduledDate] !== undefined) {
     return overrides[scheduledDate];
