@@ -12,6 +12,7 @@ const EVENTS = new Set([
   'outside-philly',
   'geo-ok',
   'geo-denied',
+  'data-error',
 ]);
 
 export function count(event) {
