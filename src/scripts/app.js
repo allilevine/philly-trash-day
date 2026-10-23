@@ -1,5 +1,6 @@
 import { geocodeAddress, lookupZone, getCoordinatesFromBrowser } from './geocode.js';
 import { getPickupStatus } from './schedule.js';
+import { count } from './count.js';
 
 // Data loaded once at module init
 let zonesGeojson = null;
@@ -123,14 +124,16 @@ function render(state, data = {}) {
   }
 }
 
-async function handleLookup(lat, lon) {
+async function handleLookup(lat, lon, source) {
   render('loading');
   const zone = lookupZone(lat, lon, zonesGeojson);
   if (!zone) {
+    count('outside-philly');
     render('error', { message: 'Address is outside Philadelphia.' });
     return;
   }
   const status = getPickupStatus(zone, todayISO(), holidays, overrides);
+  count(`${source}-ok`);
   render('result', { status, zone });
 }
 
@@ -139,11 +142,13 @@ async function handleAddressSubmit(address) {
   try {
     const coords = await geocodeAddress(address);
     if (!coords) {
+      count('address-not-found');
       render('error', { message: 'Address not found. Try including the street number and city.' });
       return;
     }
-    await handleLookup(coords.lat, coords.lon);
+    await handleLookup(coords.lat, coords.lon, 'address');
   } catch {
+    count('address-error');
     render('error', { message: 'Something went wrong. Check your connection and try again.' });
   }
 }
@@ -152,8 +157,9 @@ async function handleGeolocate() {
   render('loading');
   try {
     const coords = await getCoordinatesFromBrowser();
-    await handleLookup(coords.lat, coords.lon);
+    await handleLookup(coords.lat, coords.lon, 'geo');
   } catch {
+    count('geo-denied');
     render('error', { message: 'Location access denied. Enter your address instead.' });
   }
 }
