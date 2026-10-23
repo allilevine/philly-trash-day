@@ -2,6 +2,8 @@ import { geocodeAddress, lookupZone, getCoordinatesFromBrowser } from './geocode
 import { getPickupStatus } from './schedule.js';
 import { count } from './count.js';
 
+const DATA_ERROR = 'Failed to load schedule data. Please refresh the page.';
+
 // Data loaded once at module init
 let zonesGeojson = null;
 let holidays = [];
@@ -139,6 +141,7 @@ async function handleLookup(lat, lon, source) {
 
 async function handleAddressSubmit(address) {
   render('loading');
+  if (!(await ensureData())) return;
   try {
     const coords = await geocodeAddress(address);
     if (!coords) {
@@ -156,7 +159,10 @@ async function handleAddressSubmit(address) {
 async function handleGeolocate() {
   render('loading');
   try {
+    // Ask for coordinates before awaiting the data, so the permission prompt
+    // still starts inside the click's task.
     const coords = await getCoordinatesFromBrowser();
+    if (!(await ensureData())) return;
     await handleLookup(coords.lat, coords.lon, 'geo');
   } catch {
     count('geo-denied');
@@ -165,14 +171,26 @@ async function handleGeolocate() {
 }
 
 // Boot
-(async () => {
-  try {
-    await loadData();
-  } catch {
-    render('error', { message: 'Failed to load schedule data. Please refresh the page.' });
-    return;
-  }
+//
+// The data fetch starts now, but the listeners are attached without waiting for
+// it. Attaching them afterwards left a window between first paint and loadData()
+// resolving in which the form was already in the DOM and submittable, so an
+// early Enter press submitted natively and reloaded the page with ?address=...
+// instead of looking anything up -- and a loadData() failure meant the listeners
+// never attached at all, turning every submit into a reload. The handlers await
+// the same promise through ensureData() instead.
+const dataReady = loadData().then(
+  () => true,
+  () => false,
+);
 
+async function ensureData() {
+  if (await dataReady) return true;
+  render('error', { message: DATA_ERROR });
+  return false;
+}
+
+(async () => {
   const form = document.getElementById('address-form');
   if (form) {
     form.addEventListener('submit', (e) => {
@@ -188,4 +206,10 @@ async function handleGeolocate() {
   }
 
   render('initial');
+
+  // Surface a failed load without waiting for the visitor to try a lookup.
+  if (!(await dataReady)) {
+    count('data-error');
+    render('error', { message: DATA_ERROR });
+  }
 })();
