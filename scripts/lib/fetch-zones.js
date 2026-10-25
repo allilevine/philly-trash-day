@@ -33,6 +33,14 @@ export async function fetchAndNormalizeZones() {
       const secondTrashDay =
         rawSecondary && rawSecondary.trim() !== '' ? rawSecondary.trim().toUpperCase() : null;
 
+      const VALID_DAY = /^[A-Z]{3}$/;
+      if (!VALID_DAY.test(trashDay)) {
+        throw new Error(`Unexpected collday value from API: ${JSON.stringify(trashDay)}`);
+      }
+      if (secondTrashDay !== null && !VALID_DAY.test(secondTrashDay)) {
+        throw new Error(`Unexpected secondary_rubbish_day value from API: ${JSON.stringify(secondTrashDay)}`);
+      }
+
       const zone = { zoneId, trashDay, secondTrashDay, sandis };
       index[zoneId] = zone;
 

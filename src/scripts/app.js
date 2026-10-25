@@ -205,6 +205,11 @@ async function ensureData() {
     geoBtn.addEventListener('click', handleGeolocate);
   }
 
+  const tryAgainBtn = document.querySelector('.try-again-btn');
+  if (tryAgainBtn) {
+    tryAgainBtn.addEventListener('click', () => render('initial'));
+  }
+
   render('initial');
 
   // Surface a failed load without waiting for the visitor to try a lookup.

@@ -18,3 +18,6 @@ public/feeds/
 
 # OS
 .DS_Store
+
+# Security scan reports
+security-scan/
